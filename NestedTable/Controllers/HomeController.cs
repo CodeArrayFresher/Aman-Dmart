@@ -14,8 +14,10 @@ namespace NestedTable.Controllers
         // GET: Home
         public ActionResult ListOfOrders()
         {
-            var model = report.GetAllRecords();
-            return View(model);
+            var result = new OrderModel();
+            result.ProductList = report.GetProduct();
+            result.OrderList = report.GetOrders();
+            return View(result);
           
         }
         public ActionResult jquerylesons()

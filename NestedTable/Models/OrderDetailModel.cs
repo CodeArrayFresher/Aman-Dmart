@@ -8,19 +8,12 @@ namespace NestedTable.Models
 {
     public class OrderDetailModel
     {
-        public int Id { get; set; }
-        public DateTime Order_Date { get; set; }
-        public string Customer_Name { get; set; }
-        //public int Total_Order_Quantity { get; set; }
-        //public double Total_Amount { get; set; }
-
-        //public int Product_ID { get; set; }
-        //public string Product_Name { get; set; }
-        //public double Unit_Price { get; set; }
-        //public ProductModel pro { get; set; }
-        public List<ProductModel> productdata { get; set; }
-
-        //public ProductModel products { get; set; }
-        //public List<ProductModel> productList { get; set; }
+        public int ID { get; set; }
+        public int OrderId { get; set; }
+        public int ProductId { get; set; }
+        public int Quatity { get; set; }
+        public decimal UnitPrice { get; set; }
+        public OrderModel order { get; set; }
+        public ProductModel product { get; set; }
     }
 }

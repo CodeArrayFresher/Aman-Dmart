@@ -13,9 +13,9 @@ namespace NestedTable.Models
     public class DBRepository
     {
         string constring = ConfigurationManager.ConnectionStrings["TestEntities"].ToString();
-        public List<OrderDetailModel> GetAllRecords()
+        public List<OrderModel> GetOrders()
         {
-            List<OrderDetailModel> productlist = new List<OrderDetailModel>();
+            List<OrderModel> OrderList = new List<OrderModel>();
             using (SqlConnection con = new SqlConnection(constring))
             {
                 SqlCommand cmd = new SqlCommand("Get_Customer", con);
@@ -27,12 +27,16 @@ namespace NestedTable.Models
 
                 foreach (DataRow dr in dtable.Rows)
                 {
-                    productlist.Add(
-                        new OrderDetailModel
+                    OrderList.Add(
+                        new OrderModel
                         {
-                            Id = Convert.ToInt32(dr["Order_Id"]),
-                            Order_Date=Convert.ToDateTime(dr["Order_Date"]),
-                            Customer_Name=dr["Customer_Name"].ToString(),
+                            ID= Convert.ToInt32(dr["Order_Id"]),
+                            OrderDate=Convert.ToDateTime(dr["Order_Date"]),
+                            customerName= dr["Customer_Name"].ToString(),
+                           
+                           
+                            
+                           
                             //Total_Order_Quantity=Convert.ToInt32(dr["Quantity"]),
                             //Total_Amount=Convert.ToDouble(dr["Amount"]),
                             //Product_ID=Convert.ToInt32(dr["Product_Id"]),
@@ -44,7 +48,7 @@ namespace NestedTable.Models
                
             }
 
-            return productlist;
+            return OrderList;
         }
 
         public List<ProductModel> GetProduct()
@@ -52,7 +56,7 @@ namespace NestedTable.Models
             List<ProductModel> allproducts = new List<ProductModel>();
             using (SqlConnection con = new SqlConnection(constring))
             {
-                SqlCommand cmd = new SqlCommand("get_products", con);
+                SqlCommand cmd = new SqlCommand("Product_tbl", con);
                 //cmd.CommandType = CommandType.StoredProcedure;
                 //cmd.CommandText = "ordertetails";
                 SqlDataAdapter sda = new SqlDataAdapter(cmd);
@@ -67,11 +71,11 @@ namespace NestedTable.Models
                         new ProductModel
                         {
 
-                            Product_ID = Convert.ToInt32(dr["Id"]),
-                            Product_Name = dr["Name"].ToString(),
-                            Quantity=Convert.ToInt32(dr["Quantity"]),
-                            unitp=Convert.ToDouble(dr["Unit_Price"]),
-                            amount=Convert.ToDouble(dr["Amount"])
+                           Id = Convert.ToInt32(dr["Product_Id"]),
+                            Name= dr["Product_Name"].ToString(),
+                            Quantity = Convert.ToInt32(dr["Quantity"]),
+                            Unit_Price = Convert.ToDouble(dr["Unit_Price"]),
+                            Total_Amaount= Convert.ToDouble(dr["Amount"])
                         });
 
                 }

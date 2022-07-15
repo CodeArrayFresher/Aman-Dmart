@@ -163,6 +163,7 @@
     <Compile Include="Models\OrderDetailModel.cs" />
     <Compile Include="Models\OrderModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
     <Compile Include="Order.cs">
       <DependentUpon>ModelDB.tt</DependentUpon>
     </Compile>
