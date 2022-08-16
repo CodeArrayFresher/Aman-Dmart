@@ -1,0 +1,304 @@
+﻿@model NestedTable.Models.OrderDetailModel
+
+
+<html>
+<head>
+    <title></title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://api.html2pdf.co.uk/?license=yourlicensekey&url=https://example.com&page_size=Letter"></script>
+</head>
+<style>
+  
+    .container {
+        
+        width:80%;
+     
+    }
+
+    /*Invoice*/
+
+    .invoice .top-left {
+        font-size: 65px;
+        color: #3ba0ff;
+    }
+
+    .invoice .top-right {
+        text-align: right;
+        padding-right: 20px;
+    }
+
+    .invoice .table-row {
+        margin-left: -15px;
+        margin-right: -15px;
+        margin-top: 25px;
+    }
+
+    .invoice .payment-info {
+        font-weight: 500;
+    }
+
+    .invoice .table-row .table > thead {
+        border-top: 1px solid #ddd;
+    }
+
+        .invoice .table-row .table > thead > tr > th {
+            border-bottom: none;
+        }
+
+    .invoice .table > tbody > tr > td {
+        padding: 8px 20px;
+    }
+
+    .invoice-total {
+        margin-left: 1000px;
+        margin-top: -100px;
+        font-size: 16px;
+        width: 300px
+    }
+
+    .invoice .last-row {
+        border-bottom: 1px solid #ddd;
+    }
+
+    .invoice-ribbon {
+        width: 85px;
+        height: 88px;
+        overflow: hidden;
+        position: absolute;
+        top: -1px;
+        right: 14px;
+    }
+
+    .ribbon-inner {
+        text-align: center;
+        -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+        position: relative;
+        padding: 7px 0;
+        left: -5px;
+        top: 11px;
+        width: 120px;
+        background-color: #66c591;
+        font-size: 15px;
+        color: #fff;
+    }
+
+        .ribbon-inner:before, .ribbon-inner:after {
+            content: "";
+            position: absolute;
+        }
+
+        .ribbon-inner:before {
+            left: 0;
+        }
+
+        .ribbon-inner:after {
+            right: 0;
+        }
+
+    @@media(max-width:575px) {
+        .invoice .top-left, .invoice .top-right, .invoice .payment-details {
+            text-align: center;
+        }
+
+        .invoice .from, .invoice .to, .invoice .payment-details {
+            float: none;
+            width: 200px;
+            text-align: center;
+            
+        }
+
+            .invoice p.lead, .invoice .from p.lead, .invoice .to p.lead, .invoice .payment-details p.lead {
+                font-size: 15px;
+            }
+
+        .invoice .btn {
+            margin-top: 10px;
+        }
+    }
+
+    .invoice .from, .invoice .to, .invoice .payment-details {
+        float: none;
+        width: 33%;
+        text-align:left;
+       
+       
+    }
+
+        .invoice p.lead, .invoice .from p.lead, .invoice .to p.lead, .invoice .payment-details p.lead {
+            font-size: 18px;
+        }
+        .invoice p, .invoice .from p, .invoice .to p, .invoice .payment-details p {
+            font-size: 12px;
+        }
+
+    .invoice .btn {
+        margin-top: 10px;
+    }
+
+    @@media print {
+        .invoice {
+            width: 900px;
+            height: 900px;
+           
+        }
+    }
+</style>
+<body>
+    <div class="row">
+
+        <div class="col-xs-6 margintop" style="width:50%;height:50%;margin-left:150px;">
+            <br />
+            <button class="btn btn-success" id="invoice-print"><i class="fa fa-print"></i></button>
+            <button class="btn btn-danger" onclick="sendEmail()"><i class="fa fa-envelope-o"></i></button>
+        </div>
+
+    </div>
+    <div class="container bootstrap snippets bootdeys" id="invoicefield" style="border:1px solid black;">
+        <h3 style="text-align:center; color:midnightblue">Future Mart</h3>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default invoice" id="invoice">
+                    <div class="panel-body">
+                        @*<div class="invoice-ribbon"><div class="ribbon-inner">PAID</div></div>*@
+                        @*<div class="row">
+
+                                <div class="col-sm-6 top-left">
+                                    <i class="fa fa-rocket"></i>
+                                </div>
+
+                                <div class="col-sm-6 top-right">
+                                    <h3 class="marginright">INVOICE-1234578</h3>
+                                    <span class="marginright">14 April 2014</span>
+                                </div>
+
+                            </div>*@
+                        <hr>
+                        @foreach (var item in Model.odlist)
+                        {
+                            <div class="row row1">
+
+
+
+                                <div class="col-xs-4 from">
+                                    <p class="lead marginbottom">Seller :  @Html.DisplayFor(modelItem => item.user_name)</p>
+                                    <p>Address:Suite 240, San Francisco</p>
+                                    <p>California, 94103</p>
+                                    <p>Phone:  @Html.DisplayFor(modelItem => item.user_contact)</p>
+                                    <p>Email: @Html.DisplayFor(modelItem => item.user_email)</p>
+                                </div>
+
+                                <div class="col-xs-4 to">
+                                    <p class="lead marginbottom">Customer : @Html.DisplayFor(modelItem => item.customer_name)</p>
+                                    <p>Phone: @Html.DisplayFor(modelItem => item.customer_contact)</p>
+                                    <p>Email:  @Html.DisplayFor(modelItem => item.customer_email)</p>
+
+                                </div>
+
+                                <div class="col-xs-4 text-right payment-details">
+                                    <p class="lead marginbottom payment-info">Payment details</p>
+                                    <p>Date: @Html.DisplayFor(modelItem => item.order_date)</p>
+                                    <p>OrderID: @Html.DisplayFor(modelItem => item.OrderId) </p>
+
+                                </div>
+                            </div>
+
+                            <div class="row table-row">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:50%">Product Name</th>
+                                            <th class="text-right" style="width:15%">Unit Price</th>
+                                            <th class="text-right" style="width:15%">Quantity</th>
+                                            <th class="text-right" style="width:15%">Total Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var data in Model.prlist)
+                                        {
+                                            <tr>
+
+                                                <td> @Html.DisplayFor(modelItem => data.ProductName)</td>
+                                                <td class="text-right"> @Html.DisplayFor(modelItem => data.price)</td>
+                                                <td class="text-right"> @Html.DisplayFor(modelItem => data.quantity)</td>
+                                                <td class="text-right subtotal"> @data.subtotal</td>
+                                            </tr>
+                                        }
+                                        <tr>
+
+                                            <td></td>
+                                            <td></td>
+                                            <td style="font-weight:bold;">SubTotal:</td>
+                                            <td class="total" style="font-weight:bold;"></td>
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <h4 style="text-align:center;">Thank you for shopping</h4>
+    </div>
+
+
+
+</body>
+
+
+
+ 
+
+</html>
+
+
+<script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+<script>
+    $('#invoice-print').click(function (event) {
+        event.preventDefault();
+        var element = document.getElementById('invoicefield');
+        html2pdf().from(element).save();
+        var opt =
+          {
+            margin: [20,2,10,2],
+            filename: 'pagecontent_' + js.Autocode() + '-pdf',
+            image: { type: 'jpeg', quality: 0.99 },
+            html2canvas: { scale: 2, dpi: 1200, logging: true, letterRendering: true },
+            jsPDF: { orientation: 'portrait', unit: 'in', format: 'letter'},
+           
+           };
+    });
+
+    //sending email to customer
+    //var sendEmail =
+    //    $ajax({
+    //        type:"post",
+    //    url: "/Home/send_email",
+    //    success: function (data) {
+    //        console.log(data);
+    //    },
+    //    error: function (error) {
+
+    //    }
+
+    //});
+    //var arr = ["20.0", "40.1", "80.2", "400.3"],
+    //    sum = 0;
+    //$.each(arr, function () { sum += parseFloat(this) || 0; });
+
+    //find the total of subtotal
+    var sum = 0;
+    $('.subtotal').each(function (index, value) {
+        sum = sum + (parseInt(value.textContent));
+        $('.total').text(sum);
+
+    });
+    
+</script>

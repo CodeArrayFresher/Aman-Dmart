@@ -1,0 +1,110 @@
+﻿@model NestedTable.Models.ProductModel
+
+
+@*<h2 style="text-align:center;color:cornflowerblue">Future Mart</h2>
+<br />*@
+<h4 style="text-align:center;color:cornflowerblue">Product Table</h4>
+
+<p>
+   
+</p>
+
+<table class="table table-bordered" id="productsth"style="background-color:white;">
+    <thead>
+        <tr class="table-primary" style="text-align:center;">
+
+            <th>
+                @Html.DisplayName("Product_Id")
+            </th>
+
+            <th>
+                @Html.DisplayName("Product Name")
+            </th>
+            <th>
+                @Html.DisplayName("Latest Price")
+            </th>
+            <th>
+                @Html.DisplayName("EffectiveFrom")
+            </th>
+            <th>
+                Action
+            </th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.productlist)
+        {
+
+        <tr class="trids" style="text-align:center;">
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Unit_Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PEfromdate)
+            </td>
+            <td>
+                <a class="anchor-detail btn btn-success" style="cursor:pointer; text-decoration:none;" id="print" onclick="AddData(@(item.Id))">Update Price</a>
+            </td>
+
+            @*<td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+
+        </td>*@
+
+        </tr>
+
+
+
+        }
+
+    </tbody>
+</table>
+
+<div id='myModal' class='modal'>
+    <div class="modal-dialog">
+        <div class="modal-content" style="display:flex; justify-content:center;place-items:center;height:350px">
+            <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true" style="margin-left:380px; margin-top:-25px;border:none;background-color:white;font-size:25px;">x</button>
+
+            <div id='myModalContent' style="width: 450px; display: grid; justify-content: center; place-items: center;">
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    function AddData(id) {
+      
+        $.ajax({
+            type:"get",
+            url: "/Home/_Add_Price",
+            data: {"id": id},
+            success: function (data) {
+             
+                $('#myModalContent').html(data);
+                $('#myModal').show();
+            },
+            error: function () {
+                alert("Dynamic content load failed.");
+            }
+        });
+    }
+
+    $('.close').click(function () {
+        console.log(this);
+        $("#myModal").hide();
+    });
+
+
+</script>
+

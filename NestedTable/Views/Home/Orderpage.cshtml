@@ -1,0 +1,155 @@
+﻿
+@model NestedTable.Models.OrderDetailModel
+
+<head>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+
+    <link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+</head>
+<h2 style="text-align:center;color:darkgoldenrod;margin-bottom:50px;">Make Your Order</h2>
+
+
+@using (Html.BeginForm("Orderpage", "Home", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+<div style="display:flex">
+     @Html.Label("Todays Date:")
+    @Html.Label(DateTime.Now.ToString(), htmlAttributes: new { @class = "control-label col-md-2", @style = "margin-left:10px;" })
+
+    @Html.Label("Select Customer:")
+    @Html.DropDownListFor(model => model.cust_id, new SelectList(Model.clist, "cust_id", "customer_name"), "Select-Customer", new { @class = "form-control dropdown-toggle", @style = "width:150px; margin-bottom:5px;" })
+   
+   
+</div>
+    
+    <table class="table table-bordered" style="background-color:white">
+        @*<div class="input-group">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.cust_id, new SelectList(Model.clist, "cust_id", "customer_name"), new { @class = "form-control dropdown-toggle", @style = "width:150px;" })
+                    @Html.ValidationMessageFor(model => model.cust_id, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+
+        <tr class="thead" style="text-align:center;">
+            <th scope="col">Product Name</th>
+            <th scope="col">Unit Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Total Amount</th>
+            <th scope="col"><button class="btn btn-success float-end" type="button" onclick="addrow()">Add</button></th>
+        </tr>
+
+
+    </table>
+   
+    <div class="form-group">
+        <div class="btn-lg">
+            <button class="btn btn-success btn-lg"
+                    type="submit">
+                Save
+            </button>
+        </div>
+    </div>
+}
+
+<script>
+
+    //var sum = 0;
+    //$('#total').each(function (index, value) {
+    //    sum = sum + (parseInt(value.textContent))
+
+    //});
+    //$(function () {
+    //    $('.alltotal').text(sum);
+    //});
+
+    //add row 
+      $.ajax({
+            type: "GET",
+            url: "/Home/_Orderpage",
+            success: function (data) {
+                $(".thead").after(data);
+             
+            },
+            error: function () {
+                alert("Dynamic content load failed.");
+            }
+        });
+    function addrow() {
+        $.ajax({
+            type: "GET",
+            url: "/Home/_Orderpage",
+            success: function (data) {
+                $(".thead").after(data);
+
+            },
+            error: function () {
+                alert("Dynamic content load failed.");
+            }
+        });
+    }
+    //remove
+    $("table").on("click", "#remove", function () {
+        $(this).parent().parent().remove(".trlist");
+
+    });
+
+    //multipy price and quanity
+    $("table").on("keyup", ".Q_Id", function () {
+        var quantity = $(this).val();
+        var price = $(this).parent().parent().find(".P_Id").val();
+        $(this).parent().parent().find("#total").val(price * quantity)
+
+    });
+
+    //geting product price
+    $(document).ready(function () {
+        $("table").on("change", "#ProductList", function () {
+            var selected = $(this).find("option:selected").val();
+            var a = $(this).find("option:selected");
+            var v = $(a).parent().parent().parent().find(".quantitytd").children().val(1);
+            var T = $(a).parent().parent().parent().find(".qpval").children();
+            $(v).focusout(function () {
+                addrow();
+            });
+            $.ajax({
+                url: "/Home/selecteddata",
+                data: { "id": selected },
+                dataType: "json",
+
+                success: function (data) {
+                   $(T).val(data.disc_price * $(v).val());
+                    if (data.disc_type != false && data.unit_price != data.disc_price) {
+                        $(a).parent().parent().siblings().closest('.pricetd').find('.P_Id').val(data.disc_price);
+                        $(a).parent().parent().siblings().closest('.pricetd').find('.unitp').html('<p>&#8377;<s>' + data.unit_price + '</s> (' + data.disc_val + '% Off)</p>');
+                    }
+                    else if (data.disc_type != true && data.unit_price != data.disc_price)
+                    {
+                        $(a).parent().parent().siblings().closest('.pricetd').find('.P_Id').val(data.disc_price);
+                        $(a).parent().parent().siblings().closest('.pricetd').find('.unitp').html('<p>&#8377;<s>' + data.unit_price + '</s> (&#8377;' + data.disc_val + ' Off)</p>');
+                    }
+                    else
+                    {
+                        $(a).parent().parent().siblings().closest('.pricetd').find('.P_Id').val(data.unit_price);
+                        $(a).parent().parent().siblings().closest('.pricetd').find('.unitp').html("");
+                     }
+                       
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+              
+            });
+        });
+
+      
+    });
+
+    
+</script>

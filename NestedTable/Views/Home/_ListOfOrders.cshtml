@@ -1,0 +1,31 @@
+﻿@model NestedTable.Models.OrderModel
+
+<td colspan="999" class="appendtd">
+<table class="table table-bordered" >
+   
+    <tr  >
+        <th>Product_ID</th>
+        <th>Prdouct_Name</th>
+        <th>Quantity</th>
+        <th>Unit_price</th>
+        <th>Total_Amount</th>
+    </tr>
+        
+  
+    @foreach (var data in Model.ProductList.Select(x => x.OId = Model.ID)
+    {
+        <tr>
+
+            <td> @Html.DisplayFor(modelItem => data.Id)</td>
+            <td> @Html.DisplayFor(modelItem => data.Name)</td>
+            <td> @Html.DisplayFor(modelItem => data.Quantity)</td>
+            <td> @Html.DisplayFor(modelItem => data.Unit_Price)</td>
+            <td> @Html.DisplayFor(modelItem => data.Total_Amaount)</td>
+        </tr>
+
+
+
+    }
+
+</table>
+</td>

@@ -1,0 +1,26 @@
+﻿@model NestedTable.Models.OrderDetailModel
+
+
+
+<tr class="trlist">
+
+    @using (Html.BeginCollectionItem("prlist"))
+    {
+
+
+        <td>@Html.DropDownListFor(model => model.p_Id, new SelectList(Model.ProductList, "Id", "Name"), new { id = "ProductList", @class = "form-control" })</td>
+
+        <td class="pricetd">@Html.TextBoxFor(model => model.price, new { @class = "P_Id form-control", @name = "price"})</td>
+
+        <td class="quantitytd">@Html.TextBoxFor(model => model.quantity, new { @class = "Q_Id form-control", @name = "quantity" })</td>
+
+        <td>
+            @Html.TextBoxFor(model => model.price, new { @class = "form-control", id = "total", @name = "Amount" ,@Value=Model.price*Model.quantity})
+        </td>
+        <td><button class="remove btn btn-danger" onclick="remove()" type="button">remove</button></td>
+
+    }
+
+
+</tr>
+

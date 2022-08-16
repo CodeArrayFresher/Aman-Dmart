@@ -3,38 +3,72 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <title>@ViewBag.Title - My ASP.NET Application</title>
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+    <style>
+        .logo{
+          
+            width:20%;
+            height:100%;
+        }
+        .header {
+          
+            width: 80%;
+            height: 100%;
+            
+          
+            
+        }
+        ul {
+            color: white;
+          
+            margin-top:50px;
+           float:right;
+           margin-right:10px;
+        }
+            ul li {
+                display: inline;
+                margin-left:40px;
+                padding:0;
+              
+            }
+    </style>
 </head>
-<body>
+<body style="padding:0;background-color:whitesmoke;">
+   
+    <header style="height: 100px; background-image: url('/Content/wheat.png'); display: flex;background-size:100%;background-blend-mode:color-dodge">
+        <div class="logo" >
+            <h1 style="color:white;text-align:center">FUTURE<br /> MART</h1>
+        </div>
+        <div class="header">
+            <ul style="">
+                <a href="ListOfOrders" style="text-decoration:none;" class="btn btn-outline-light">Order</a>
+             
+                <a href="Product_List" style="text-decoration:none; " class="btn btn-outline-light">Products</a>
+                <a href="Discount_page" style="text-decoration:none;" class="btn btn-outline-light">Discount</a>
+
+            </ul>
+        </div>
+    </header>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
+
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                </ul>
+               
             </div>
         </div>
     </div>
 
     <div class="container body-content">
         @RenderBody()
-        <hr />
+
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
         </footer>
     </div>
 
-    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
+    @*<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+        <script src="~/Scripts/bootstrap.min.js"></script>*@
 </body>
 </html>

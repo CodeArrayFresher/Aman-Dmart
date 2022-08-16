@@ -1,0 +1,18 @@
+﻿@model NestedTable.Models.OrderModel
+
+
+<tbody>
+    @foreach (var data in Model.ProductList)
+    {
+        <tr class="@data.OId" id="gdata">
+
+            <td> @Html.DisplayFor(modelItem => data.Id)</td>
+            <td> @Html.DisplayFor(modelItem => data.Name)</td>
+            <td> @Html.DisplayFor(modelItem => data.Quantity)</td>
+            <td> @Html.DisplayFor(modelItem => data.Unit_Price)</td>
+            <td> @Html.DisplayFor(modelItem => data.Total_Amaount)</td>
+        </tr>
+    }
+
+</tbody>
+

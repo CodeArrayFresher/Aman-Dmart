@@ -1,0 +1,109 @@
+﻿@model NestedTable.Models.ProductModel
+
+<h3 style="text-align:center;color:darkgoldenrod;margin-bottom:50px;">Discount Table</h3>
+
+  
+    <button class="btn btn-primary" type="button" onclick="GetData()">Add</button>
+    <br />
+    <br />
+    <table class="table table-bordered" style="background-color:white">
+        <thead>
+        <tr class="thead" style="text-align:center;">
+            <th scope="col">Product Name</th>
+            <th scope="col">Unit Price</th>
+            
+            <th scope="col">Discount Value</th>
+            <th scope="col">Effective From</th>
+            <th scope="col">Effective Till</th>
+
+        </tr>
+            </thead>
+        <tbody>
+            @foreach (var item in Model.productlist)
+            {
+            <tr>
+                <td>@Html.DisplayFor(model => item.Name)</td>
+                <td>
+                    @Html.DisplayFor(model => item.Unit_Price)
+                </td>
+                @if (item.IsPercentile == true)
+                {
+            <td>
+                @Html.DisplayFor(model => item.disc_value)%
+            </td>
+                }
+                else
+                {
+            <td>
+                &#8377;@Html.DisplayFor(model => item.disc_value)
+            </td>
+                }
+                <td>
+                    @Html.DisplayFor(model => item.PEfromdate)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.PEfTodate)
+                </td>
+            </tr>
+            }
+
+        </tbody>
+    </table>
+
+    <div id='myModal' class='modal'>
+        <div class="modal-dialog">
+            <div class="modal-content" style="display:flex; justify-content:center;place-items:center;height:550px;width:460px;">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true" style="margin-left:380px;margin-top:0px; border:none;background-color:white;font-size:25px;">x</button>
+                <div id='myModalContent' style="width: 380px; display: grid; justify-content: center; place-items: center;margin-top:-10px ">
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+<script>
+
+//modal popup
+    function GetData() {
+        $.ajax({
+            type: "GET",
+            url: "/Home/_Add_Discount",
+            success: function (data) {
+         
+                $('#myModalContent').html(data);
+                $('#myModal').show();
+            },
+            error: function (error) {
+                alert("Dynamic content load failed.");
+            }
+        });
+    }
+
+    $('.close').click(function () {
+        console.log(this);
+        $("#myModal").hide();
+    });
+
+    //get selected product price
+    $(document).ready(function () {
+        
+        $("#myModal").on("change", "#ProductList", function () {
+          
+            var selected = $(this).find("option:selected").val();
+            var a = $(this).find("option:selected");
+            $.ajax({
+                url: "/Home/selecteddata",
+                data: { "id": selected },
+                success: function (data) {
+                   
+                    $(a).parent().parent().parent().siblings().find('#pid').val(data.unit_price);
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+
+
+    });
+</script>

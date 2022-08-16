@@ -1,99 +1,212 @@
 ﻿@model NestedTable.Models.OrderModel
 
-@{
-    ViewBag.Title = "ListOfOrders";
-}
 
-<h2 style="text-align:center;color:cornflowerblue">Order Table</h2>
 
-@*<p>
-        @Html.ActionLink("Create New", "Create")
-    </p>*@
-<table class="table table-bordered">
-    <tr class="table-primary">
-        <th class="check"><button id="showall" class="btn btn-primary">See All</button></th>
-        <th>
-            @Html.DisplayNameFor(model => model.ID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.OrderDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.customerName)
-        </th>
-      
+<head>
 
-    </tr>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 
-    @foreach (var item in Model)
-    {
+    <link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
 
-        <tr>
-            <td class="glyphicon glyphicon-plus">
-                <img src="~/Content/plus.png" height="20" width="20" id="@("img"+item.ID)" />
-                @*<div style="display:none">
-                    <table class="table table-bordered">
-                        <tr class="table-danger">
-                            <th>Product_ID</th>
-                            <th>Prdouct_Name</th>
-                            <th>Quantity</th>
-                            <th>Unit_price</th>
-                            <th>Total_Amount</th>
-                        </tr>
+</head>
+@*<nav>@Html.Partial("Navigation")</nav>*@
 
-                        <tr>
+<h3 style="text-align:center;color:cornflowerblue">Order Table</h3>
+<a href="Orderpage" style="text-decoration:none;margin-bottom:5px;" class="btn btn-outline-success">+</a>
+<table class="table table-bordered" id="productsth" style="border:0.5px solid black;background-color:white;">
+    <thead>
+        <tr class="table-primary">
+            <th class="check">
+                <button id="showall" class="btn btn-primary getids" Value="See All">See All</button>
+                <button id="hideall" class="btn btn-primary" style="display:none;">HideAl</button>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ID)
+            </th>
 
-                            <td> @Html.DisplayFor(modelItem => item.Product_ID)</td>
-                            <td> @Html.DisplayFor(modelItem => item.Product_Name)</td>
-                            <td> @Html.DisplayFor(modelItem => item.Total_Order_Quantity)</td>
-                            <td> @Html.DisplayFor(modelItem => item.Unit_Price)</td>
-                            <td> @Html.DisplayFor(modelItem => item.Total_Amount)</td>
-                        </tr>
-                    </table>
-                </div>*@
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.customerName)
-            </td>
-            
-            @*<td>
-                    @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-                </td>*@
+            <th>
+                @Html.DisplayNameFor(model => model.customerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderDate)
+            </th>
+            <th>
+                Print
+            </th>
+
+
         </tr>
-    }
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderList)
+        {
 
+            <tr class="trids" id="@item.ID">
+                <td class="glyphicon glyphicon-plus">
+                    <img src="~/Content/plus.png" height="20" width="20" onclick="show_one(@(item.ID))" />
+                    <img src="~/Content/minus.png" height="20" width="20" style="display:none" />
+
+                </td>
+                <td>
+                    <a class="anchor-detail OrderID" href="@Url.Action("editOrder", "Home", new { id = @item.ID })" style="cursor:pointer; text-decoration:none; color:black;">@Html.DisplayFor(modelItem => item.ID)</a>
+                </td>
+
+                <td>
+                    <a class="anchor-detail" href="@Url.Action("editOrder", "Home", new {  id = @item.ID })" style="cursor:pointer; text-decoration:none; color:black;">@Html.DisplayFor(modelItem => item.customerName)</a>
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderDate)
+                </td>
+                <td>
+                    <a class="anchor-detail btn btn-success" href="@Url.Action("printfunk", "Home", new {  id = @item.ID })" style="cursor:pointer; text-decoration:none;" id="print">Print</a>
+                </td>
+
+                @*<td>
+                        @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+
+                    </td>*@
+            <tr class="productTable" id="prtbl" style="display:none;background-color:whitesmoke">
+                <td colspan="999" class="appendtd">
+                    <table class="table table-bordered" style="border:0.5px solid gray;
+">
+                        <thead>
+                            <tr class="tabletr  @item.ID" style="background-color:rosybrown">
+                                <th>Product_ID</th>
+                                <th>Prdouct_Name</th>
+                                <th>Quantity</th>
+                                <th>Unit_price</th>
+                                <th>Total_Amount</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </td>
+            </tr>
+            </tr>
+
+
+
+        }
+
+    </tbody>
 </table>
-
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript">
 
-    var model = @Html.Raw(Json.Encode(Model));
-    console.log(model);
-        $('button').click(function () {
-            $.each(model, function (index, item) {
-            $("#img" + item.Id).trigger("click");
-            });
+
+    //show all productlist rows in order
+
+    $("#showall").click(function () {
+
+        var arr = new Array();
+
+        $('table').find('.trids').each(function (index, i) {
+            var ids = parseInt($(i).find('.OrderID').text());
+            arr.push(ids);
+
         });
+        var arr1 = arr.join(',');
+        console.log(arr1);
+
+        $.ajax({
+            url: '/Home/Getorderids',
+            data: { 'ids': arr1 },
+            success: function (data) {
+
+                for (var i = 0; i < arr1.length; i++) {
+                    //console.log(arr1[0]);
+                    var a = JSON.stringify(arr[i]);
+
+                    var d = $(data).find('.' + a);
+
+                    $('#productsth').find('.' + a).after(d);
+                    $('#productsth').find('.productTable').show();
+                    $('#productsth').find("img[src*='plus.png']").hide();
+                    $('#productsth').find("img[src*='minus.png']").show();
+                    $('#productsth').find("#showall").hide();
+                    $('#productsth').find("#showall").siblings().show();
+                }
+            },
+            error: function () {
+                alert("dynamic content not found");
+            }
+        })
+    });
+
+    // remove multi productlist rows from orders
+
+    $("#hideall").unbind("click").click(function () {
+
+        $(this).hide();
+        $(this).parent().parent().parent().parent().find("img[src*='minus.png']").hide();
+        $(this).parent().parent().parent().parent().find("img[src*='plus.png']").show();
+        $(this).siblings().show();
+        $(this).parent().parent().parent().parent().find('.productTable').find('.tabletr').nextAll().remove();
+        $(this).parent().parent().parent().parent().find('.productTable').hide();
+
+    });
 
 
-        $("table").on("click", "img[src*='plus.png']", function () {                                 //*= it will call al plus.png im
-            $(this).closest("tr").after("<tr><td></td><td colspan = '9'>" + $(this).next().html() + "</td></tr>");
-            $(this).attr("src", "/content/minus.png");
-        });
+    //add single id row
+
+    function show_one(id) {
+        var a = JSON.stringify(id);
+
+        $.ajax({
+            url: '/Home/Getorderids',
+            data: { 'ids': id },
+            success: function (data) {
+                console.log(data);
+                $('#' + a).next('.productTable').show();
+                $('#' + a).next('.productTable').find('.tabletr').parent().after(data);
+                $('#' + a).find("img[src*='plus.png']").hide();
+                $('#' + a).find("img[src*='minus.png']").show();
+
+            },
+            error: function () {
+                alert("dynamic content not found");
+            }
+        })
+    }
+
+    //remove single id row
+
+    $("table").on("click", "img[src*='minus.png']", function () {
+        $(this).hide();
+        $(this).parent().parent().next('.productTable').find('.tabletr').parent().next().remove();
+        $(this).parent().parent().next(".productTable").hide();
+        $(this).siblings().show();
+    });
 
 
-        $("table").on("click", "img[src*='minus.png']", function () {
-            $(this).attr("src", "/content/plus.png");
-            $(this).closest("tr").next().remove();
-        });
+
+
+
+            //function showproduct(id) {
+            //    $("table").on("click", "img[src*='plus.png']", function () {
+            //        $(this).attr("src", "/content/minus.png");
+            //        var a = $(this);
+
+            //    $.ajax({
+            //        url: "/Home/_ListOfOrders",
+            //        data: { "Id": id },
+
+            //        success: function (data) {
+            //            debugger;
+
+
+            //            $(a).parent().parent().next().append(data);
+
+            //        },
+            //        error: function (error) {
+            //            alert("Dynamic content load failed.");
+            //        }
+            //    });
+
+            //    });
+            //}
+
 
 </script>
 
